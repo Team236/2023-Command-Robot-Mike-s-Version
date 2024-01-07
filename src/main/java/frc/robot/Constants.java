@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -31,6 +33,19 @@ public final class Constants {
     public static final double FORWARD_SPEED = 0.85;
     public static final double REVERSE_SPEED = -0.5;
 
+    public static class Camera {
+ /**
+ * camera lens location relative to the robot center at the floor
+ *  X+ → Pointing forward (Forward Vector)
+ *  Y+ → Pointing toward the robot’s right (Right Vector) ???
+ *     Note Y+:This is currently failing the right-hand-rule
+ *  Z+ → Pointing upward (Up Vector)
+ */
+    public static final double limelightXforward = Units.inchesToMeters(12);  
+    public static final double limelightYside = Units.inchesToMeters(6);
+    public static final double limelightZup = Units.inchesToMeters(24);  
+    }
+    
     public static class ControllerConstants {
     
         public static class Thrustmaster {
@@ -54,5 +69,7 @@ public final class Constants {
                 public static final int THROTTLE = 3;
             } 
         }
-    }  
+    }
+
+    
 }

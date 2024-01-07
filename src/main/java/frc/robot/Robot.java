@@ -7,8 +7,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.LimelightHelpers.LimelightResults;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -20,10 +22,12 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private Compressor compressor;
   private RobotContainer m_robotContainer;
-
+  private double pipeline, currentMarker;
+  private boolean hasTarget;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
+   * todo ASSIGN 
    */
   @Override
   public void robotInit() {
@@ -32,6 +36,13 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
     compressor.enableDigital();
+   
+    // assign the current pipeline for start and use pipeline lEDMode
+      LimelightHelpers.setPipelineIndex("Limelight", 0);
+      LimelightHelpers.setLEDMode_PipelineControl("Limelight");
+    // Assign the camera position relative the robot here "setCameraPose_RobotSpace()" option is to set in Limelight web interface
+      LimelightHelpers.setCameraPose_RobotSpace("Limelight", Constants.Camera.limelightXforward, 
+              Constants.Camera.limelightYside, Constants.Camera.limelightZup,  0,  0,  0);
   }
 
   /**
@@ -47,7 +58,15 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-    CommandScheduler.getInstance().run();
+    CommandScheduler.getInstance().run(); 
+        
+    // periodic updates of limelight hasTarget (optional)
+    hasTarget = LimelightHelpers.getTV("limelight");
+    // publish current marker to smart dashboard
+    SmartDashboard.setDefaultNumber("MarkerNumber", LimelightHelpers.getFiducialID("Limelight"));
+    SmartDashboard.putNumber("ActivePipeline", pipeline);
+    
+    
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
